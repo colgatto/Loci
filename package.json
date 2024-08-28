@@ -1,0 +1,11 @@
+{
+  "name": "loci",
+  "version": "1.0.0",
+  "description": "Memorized history for generic object",
+  "main": "Loci.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Colgatto <colgatto@protonmail.com> (https://github.com/colgatto)",
+  "license": "ISC"
+}

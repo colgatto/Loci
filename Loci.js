@@ -31,11 +31,15 @@
 			return this.#data;
 		}
 	
-		getHistory(){
+		history(){
 			return this.#history;
 		}
-	
-		set(...args){
+
+		index(){
+			return this.#index;
+		}
+
+	    	set(...args){
 			this.#index++;
 			if(this.#type == Loci.#types.PRIMITIVE){
 				this.#history[this.#index] = args[0];

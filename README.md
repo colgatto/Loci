@@ -38,7 +38,7 @@ let v = data.redo();
 ## Usage with Object
 
 ```js
-const data = new Loci( { lorem: 15, ipsum: { dolor: 23 } } );
+const data = new Loci( { lorem: 15, ipsum: { dolor: 23 }, amet: [1, 2, 3] } );
 ```
 
 ### Change value
@@ -67,4 +67,28 @@ data.add(20, 'ipsum', 'tenet');
 delete `<Object>.ipsum.dolor`
 ```js
 data.delete('ipsum', 'dolor');
+```
+
+### Push value to Array
+push 4 in `<Object>.amet`
+```js
+data.push(4, 'amet');
+```
+
+### Unshift value to Array
+unshift 4 in `<Object>.amet`
+```js
+data.unshift(4, 'amet');
+```
+
+### Pop value from Array
+pop from `<Object>.amet`
+```js
+data.pop('amet');
+```
+
+### Shift value from Array
+shift from `<Object>.amet`
+```js
+data.shift('amet');
 ```

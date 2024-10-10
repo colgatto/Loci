@@ -57,4 +57,16 @@ console.log("data2.undo() = ", data2.undo() );
 console.log("data2.redo() = ", data2.redo() );
 console.log("data2.redo() = ", data2.redo() );
 
-/**/
+console.log("data2.push(40, 0) = ", data2.push(40, 0) );
+console.log("data2.shift(0) = ", data2.shift(0) );
+console.log("data2.undo() = ", data2.undo() );
+console.log("data2.undo() = ", data2.undo() );
+console.log("data2.redo() = ", data2.redo() );
+console.log("data2.redo() = ", data2.redo() );
+
+console.log("data2.unshift(100, 0) = ", data2.unshift(100, 0) );
+console.log("data2.undo() = ", data2.undo() );
+console.log("data2.redo() = ", data2.redo() );
+console.log("data2.pop(0) = ", data2.pop(0) );
+console.log("data2.undo() = ", data2.undo() );
+console.log("data2.redo() = ", data2.redo() );

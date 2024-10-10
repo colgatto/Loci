@@ -39,8 +39,93 @@
 			return this.#index;
 		}
 
+		#arrayOp(type, args){
+			if(this.#type == Loci.#types.PRIMITIVE){
+				throw new Error(`can't use ${type}() on primitive data, only on object`);
+			}
+			this.#index++;
+			const startIndex = ( type == 'shift' || type == 'pop' ) ? 0 : 1;
+			if(args[0] instanceof Array){
+				//multiple arrayOp
+				const list = [];
+				for (let k = 0; k < args[0].length; k++) {
+					const arg = args[0][k];
+					let tmpV = this.#data;
+					for (let i = startIndex; i < arg.length - 1; i++) {
+						tmpV = tmpV[arg[i]];
+					}
+					const lastK = arg[arg.length - 1];
+					if(!(tmpV[lastK] instanceof Array)){
+						this.#index--;
+						throw new Error(`"${lastK}" is not array`);
+					}
+					if( type == 'shift' || type == 'pop' ){
+						const v = tmpV[lastK][type]();
+						list.push({
+							multi: true,
+							type: type,
+							args: arg,
+							v
+						});
+					}else{
+						tmpV[lastK][type](arg[0]);
+						list.push({
+							multi: true,
+							type: type,
+							args: arg,
+							v: tmpV[lastK]
+						});
+					}
+				}
+				this.#history[this.#index] = {
+					multi: true,
+					type: type,
+					list
+				};
+			}else{
+				//single arrayOp
+				let tmpV = this.#data;
+				for (let i = startIndex; i < args.length - 1; i++) {
+					tmpV = tmpV[args[i]];
+				}
+				const lastK = args[args.length - 1];
+				if(!(tmpV[lastK] instanceof Array)){
+					this.#index--;
+					throw new Error(`"${lastK}" is not array`);
+				}
+				let v;
+				if( type == 'shift' || type == 'pop' ){
+					v = tmpV[lastK][type]();
+				}else{
+					v = tmpV[lastK];
+					tmpV[lastK][type](args[0]);
+				}
+				this.#history[this.#index] = {
+					multi: false,
+					type,
+					args,
+					v
+				};
+			}
+			//reset history
+			this.#history.splice(this.#index+1, this.#history.length-this.#index);
+			return this.#data;
+		}
+
+		push(...args){
+			return this.#arrayOp('push', args);
+		}
+		pop(...args){
+			return this.#arrayOp('pop', args);
+		}
+		shift(...args){
+			return this.#arrayOp('shift', args);
+		}
+		unshift(...args){
+			return this.#arrayOp('unshift', args);
+		}
+
 		add(...args){
-			
 			if(this.#type == Loci.#types.PRIMITIVE){
 				throw new Error("can't use add() on primitive data, only on object");
 			}
@@ -201,7 +286,7 @@
 	
 		#singleUndo(state){
 			let tmpV = this.#data;
-			const startIndex = state.type == 'delete' ? 0 : 1;
+			const startIndex = ( state.type == 'delete' || state.type == 'shift' || state.type == 'pop' ) ? 0 : 1;
 			for (let i = startIndex; i < state.args.length - 1; i++) {
 				tmpV = tmpV[state.args[i]];
 			}
@@ -215,6 +300,18 @@
 					break;
 				case 'delete':
 					tmpV[lastK] = state.v;
+					break;
+				case 'pop':
+					tmpV[lastK].push(state.v);
+					break;
+				case 'shift':
+					tmpV[lastK].unshift(state.v);
+					break;
+				case 'push':
+					tmpV[lastK].pop();
+					break;
+				case 'unshift':
+					tmpV[lastK].shift();
 					break;
 			}
 		}
@@ -242,7 +339,7 @@
 	
 		#singleRedo(state){
 			let tmpV = this.#data;
-			const startIndex = state.type == 'delete' ? 0 : 1;
+			const startIndex = ( state.type == 'delete' || state.type == 'shift' || state.type == 'pop' ) ? 0 : 1;
 			for (let i = startIndex; i < state.args.length - 1; i++) {
 				tmpV = tmpV[state.args[i]];
 			}
@@ -256,6 +353,18 @@
 					break;
 				case 'delete':
 					delete tmpV[lastK];
+					break;
+				case 'pop':
+					tmpV[lastK].pop();
+					break;
+				case 'shift':
+					tmpV[lastK].shift();
+					break;
+				case 'push':
+					tmpV[lastK].push(state.args[0]);
+					break;
+				case 'unshift':
+					tmpV[lastK].unshift(state.args[0]);
 					break;
 			}
 		}

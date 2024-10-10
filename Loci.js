@@ -318,11 +318,13 @@
 	
 		undo(){
 			if(this.#index == 0) return this.#data;
+			let state;
 			if(this.#type == Loci.#types.PRIMITIVE){
 				this.#index--;
-				this.#data = this.#history[this.#index];
+				state = this.#history[this.#index];
+				this.#data = state;
 			}else{
-				const state = this.#history[this.#index];
+				state = this.#history[this.#index];
 				if(state.multi){
 					//multiple undo
 					for (let k = 0; k < state.list.length; k++) {
@@ -334,7 +336,7 @@
 				}
 				this.#index--;
 			}
-			return this.#data;
+			return state;
 		}
 	
 		#singleRedo(state){
@@ -371,12 +373,11 @@
 	
 		redo(){
 			if(this.#index == this.#history.length-1) return this.#data;
+			this.#index++;
+			const state = this.#history[this.#index];
 			if(this.#type == Loci.#types.PRIMITIVE){
-				this.#index++;
-				this.#data = this.#history[this.#index];
+				this.#data = state;
 			}else{
-				this.#index++;
-				const state = this.#history[this.#index];
 				if(state.multi){
 					//multiple redo
 					for (let k = 0; k < state.list.length; k++) {
@@ -387,7 +388,7 @@
 					this.#singleRedo(state);
 				}
 			}
-			return this.#data;
+			return state;
 		}
 	}
 

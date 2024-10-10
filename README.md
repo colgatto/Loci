@@ -56,3 +56,15 @@ data.set([
 ]);
 ```
 In this case, when undo/redo is used, all changes will be undone/redone.
+
+### Add key
+add `<Object>.ipsum.tenet` = 20
+```js
+data.add(20, 'ipsum', 'tenet');
+```
+
+### Delete key
+delete `<Object>.ipsum.dolor`
+```js
+data.delete('ipsum', 'dolor');
+```

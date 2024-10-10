@@ -48,4 +48,13 @@ console.log(`data2.set([
 ]) );
 
 console.log("data2.undo() = ", data2.undo() );
+
+console.log('--------------------------');
+console.log("data2.add(20, 1, 1, 'foo') = ", data2.add(20, 1, 1, 'foo') );
+console.log("data2.delete(1, 1, 'we') = ", data2.delete(1, 1, 'we') );
+console.log("data2.undo() = ", data2.undo() );
+console.log("data2.undo() = ", data2.undo() );
+console.log("data2.redo() = ", data2.redo() );
+console.log("data2.redo() = ", data2.redo() );
+
 /**/

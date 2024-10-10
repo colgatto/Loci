@@ -31,10 +31,13 @@
 			return this.#data;
 		}
 	
-		getHistory(){
+		history(){
 			return this.#history;
 		}
 	
+		index(){
+			return this.#index;
+		}
 
 		add(...args){
 			
